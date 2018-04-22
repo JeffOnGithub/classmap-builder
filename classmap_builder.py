@@ -1,13 +1,19 @@
 from PIL import Image
 import os
 
-NUMBER_OF_IMGS = 240
+NUMBER_OF_IMGS = 3000
+TYPE_OF_SET = 'train'
+#TYPE_OF_SET = 'val'
+#TYPE_OF_SET = 'test'
 
-INPUT_FOLDER = "./Input/HighresScreenshot"
-OUTPUT_IMGS_FOLDER = "./Output/Images/"
-OUTPUT_MAPS_FOLDER = "./Output/Maps/" 
+
+INPUT_FOLDER = "./" + TYPE_OF_SET + "/HighresScreenshot"
+OUTPUT_IMGS_FOLDER = "./Output/" + TYPE_OF_SET + "/Images/"
+OUTPUT_MAPS_FOLDER = "./Output/" + TYPE_OF_SET + "/Maps/" 
 FILE_EXT = ".png"
-IDS_FILE_PATH = "./Output/id.txt"
+IDS_FILE_PATH = "./Output/" + TYPE_OF_SET + "/id.txt"
+
+os.system('cd Output && mkdir ' + TYPE_OF_SET + ' && cd ' + TYPE_OF_SET + ' && mkdir Images && mkdir Maps')
 
 for i in range(0, NUMBER_OF_IMGS):
     
@@ -16,7 +22,7 @@ for i in range(0, NUMBER_OF_IMGS):
         #All hacked up to work!
         full_source_path = "HighresScreenshot" + str(i).zfill(5) + FILE_EXT
         full_dest_path = OUTPUT_IMGS_FOLDER + str(int(i / 2)).zfill(5) + FILE_EXT
-        os.system('cd Input && copy /Y ' + full_source_path + ' ' + '".' + full_dest_path + '"')
+        os.system('cd ' + TYPE_OF_SET + ' && copy /Y ' + full_source_path + ' ' + '".' + full_dest_path + '"')
     else:
     #Odd numbers are maps, clean them and save them 
         #Open raw map
@@ -42,29 +48,29 @@ for i in range(0, NUMBER_OF_IMGS):
         for y in range(map_height):
             for x in range(map_width):
                 #White
-                if pixdata_raw[x, y][0] >= 200 and pixdata_raw[x, y][1] >= 100 and pixdata_raw[x, y][2] >= 100:
+                if pixdata_raw[x, y] == (255, 255, 255, 255):
                     pixdata_cleaned[x, y] = 0
                 #Black
-                elif pixdata_raw[x, y][0] <= 100 and pixdata_raw[x, y][1] <= 100 and pixdata_raw[x, y][2] <= 100:
-                    pixdata_cleaned[x, y] = 1 #31
+                elif pixdata_raw[x, y] == (0, 0, 0, 255):
+                    pixdata_cleaned[x, y] = 0 #31
                 #Yellow
-                elif pixdata_raw[x, y][0] >= 100 and pixdata_raw[x, y][1] >= 100 and pixdata_raw[x, y][2] <= 100:
-                    pixdata_cleaned[x, y] = 2 #63
+                elif pixdata_raw[x, y] == (255, 255, 0, 255):
+                    pixdata_cleaned[x, y] = 1 #63
                 #Cyan
-                elif pixdata_raw[x, y][0] <= 200 and pixdata_raw[x, y][1] >= 100 and pixdata_raw[x, y][2] >= 100:
-                    pixdata_cleaned[x, y] = 3 #95
+                elif pixdata_raw[x, y] == (0, 255, 255, 255):
+                    pixdata_cleaned[x, y] = 1 #95
                 #Pink
-                elif pixdata_raw[x, y][0] >= 100 and pixdata_raw[x, y][1] <= 100 and pixdata_raw[x, y][2] >= 100:
-                    pixdata_cleaned[x, y] = 4 #127
+                elif pixdata_raw[x, y] == (255, 0, 255, 255):
+                    pixdata_cleaned[x, y] = 1 #127
                 #Red
-                elif pixdata_raw[x, y][0] >= 100 and pixdata_raw[x, y][1] <= 100 and pixdata_raw[x, y][2] <= 100:
-                    pixdata_cleaned[x, y] = 5 #159
+                elif pixdata_raw[x, y] == (255, 0, 0, 255):
+                    pixdata_cleaned[x, y] = 1 #159
                 #Green
-                elif pixdata_raw[x, y][0] <= 100 and pixdata_raw[x, y][1] >= 100 and pixdata_raw[x, y][2] <= 100:
-                    pixdata_cleaned[x, y] = 6 #223
+                elif pixdata_raw[x, y] == (0, 255, 0, 255):
+                    pixdata_cleaned[x, y] = 1 #223
                 #Blue
-                elif pixdata_raw[x, y][0] <= 100 and pixdata_raw[x, y][1] <= 100 and pixdata_raw[x, y][2] >= 100:
-                    pixdata_cleaned[x, y] = 7 #191
+                elif pixdata_raw[x, y] == (0, 0, 255, 255):
+                    pixdata_cleaned[x, y] = 1 #191
 
         
         #Save cleaned map

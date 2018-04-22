@@ -1,6 +1,6 @@
 from PIL import Image
 
-NUMBER_OF_IMGS = 305
+NUMBER_OF_IMGS = 1500
 
 INPUT_FOLDER = "./Maps/"
 OUTPUT_IMGS_FOLDER = "./Output/Images/"
@@ -30,3 +30,9 @@ for i in range(0, NUMBER_OF_IMGS):
 print(class_total)
 for each_class in class_total:
     print(1 / (each_class / sum(class_total)))
+    
+class_ground = class_total[0] + class_total[1]
+
+class_other = class_total[2] + class_total[3] + class_total[4] + class_total[5] + class_total[6] + class_total[7]
+
+class_ground
